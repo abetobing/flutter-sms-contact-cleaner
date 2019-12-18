@@ -4,17 +4,25 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:contacts_service/contacts_service.dart';  
  
-class ContactScreen extends StatelessWidget {
+class ContactScreen extends StatefulWidget {
 
+  @override
+  ContactScreenState createState() => ContactScreenState();
+
+}
+
+
+
+class ContactScreenState extends State<ContactScreen> {
+  final String title = 'Contact List Screen';
   Future<Iterable<Contact>> contacts;
-  final String title = 'Contact List';
 
-  // @override
-  // State<StatefulWidget> initState() {
-  //   super.initState();
-  //   contacts = ContactsService.getContacts();
-  // }
-  
+  @override
+  State<StatefulWidget> initState() {
+    super.initState();
+    contacts = ContactsService.getContacts();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -22,7 +30,7 @@ class ContactScreen extends StatelessWidget {
         title: Text(title),
       ),
       body: FutureBuilder<Iterable<Contact>>(
-        future: ContactsService.getContacts(),
+        future: contacts,
         builder: (context, snapshot) {
           switch (snapshot.connectionState) {
             case ConnectionState.none:          
@@ -42,7 +50,7 @@ class ContactScreen extends StatelessWidget {
                 //     Text('price: ${productInfo['price']}USD'),
                 // );
 
-                return ListView.builder(
+                return ListView.separated(
                   itemCount: list.length,
                   itemBuilder: (context, index) {
                     return ListTile(
@@ -50,9 +58,10 @@ class ContactScreen extends StatelessWidget {
                         list[index].displayName,
                         style: Theme.of(context).textTheme.headline,
                       ),
-                      subtitle: Text(list[index].phones.join('; ')),
+                      subtitle: Text(list[index].phones.toString()),
                     );
-                  },
+                  }, 
+                  separatorBuilder: (BuildContext context, int index) => Divider(),
                 );
 
                 
@@ -62,6 +71,9 @@ class ContactScreen extends StatelessWidget {
         }
       ),
     );
+  }
+
+  Widget contactBuilder(context, index) {
   }
 
 }
