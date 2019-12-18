@@ -36,7 +36,7 @@ class MyApp extends StatelessWidget {
     // );
 
     return MaterialApp(
-        title: 'Provider Demo',
+        title: 'Sms and Contact Cleaner',
         // theme: appTheme,
         initialRoute: '/contact',
         routes: {
