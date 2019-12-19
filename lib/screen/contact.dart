@@ -1,6 +1,7 @@
 
 import 'dart:async';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:contacts_service/contacts_service.dart';  
  
@@ -43,22 +44,11 @@ class ContactScreenState extends State<ContactScreen> {
               } else {
                 final list = snapshot.data.toList();
 
-                // return ListTile(
-                //   leading: Icon(Icons.shopping_cart),
-                //   title: Text(productInfo['name']),
-                //   subtitle: 
-                //     Text('price: ${productInfo['price']}USD'),
-                // );
-
                 return ListView.separated(
                   itemCount: list.length,
                   itemBuilder: (context, index) {
-                    return ListTile(
-                      title: Text(
-                        list[index].displayName,
-                        style: Theme.of(context).textTheme.headline,
-                      ),
-                      subtitle: Text(list[index].phones.toString()),
+                    return ContactItemCard(
+                      contact: list[index],
                     );
                   }, 
                   separatorBuilder: (BuildContext context, int index) => Divider(),
@@ -73,7 +63,69 @@ class ContactScreenState extends State<ContactScreen> {
     );
   }
 
-  Widget contactBuilder(context, index) {
+}
+
+
+class ContactItemCard extends StatelessWidget {
+
+  final Contact contact;
+
+  const ContactItemCard({Key key, this.contact}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    var composeAdditionalContactInfo2 = composeAdditionalContactInfo();
+    return Container(
+      padding: const EdgeInsets.all(8),
+      child: Row(
+        children: <Widget>[
+          Column(
+            mainAxisSize: MainAxisSize.min,
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Icon(Icons.person , color: Colors.blueGrey, size: 32),
+            ],
+          ),
+          VerticalDivider(),
+          Expanded(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: composeAdditionalContactInfo2
+            ),
+          ),
+          
+        ],
+      ),
+    );
+  }
+
+  List<Widget> composeAdditionalContactInfo() {
+    List<Widget> additionalInfo = new List();
+
+    additionalInfo.add(
+      Text(
+        contact.displayName,
+        style: TextStyle(
+          fontSize: 20.0
+        ),
+      )
+    );
+
+    TextStyle style = TextStyle(
+      color: Colors.grey
+    );
+    for (Item p in contact.phones) {
+      additionalInfo.add(
+        Text(p.value, style: style)
+      );
+    }
+    for (Item p in contact.emails) {
+      additionalInfo.add(
+        Text(p.value, style: style)
+      );
+    }
+    return additionalInfo;
   }
 
 }
